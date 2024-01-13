@@ -1,0 +1,27 @@
+
+
+.left-region {
+    width: 80%;
+    float: left;
+  }
+  
+  .right-region {
+    width: 20%;
+    float: left;
+
+  }
+  .left-region2{
+    width: 20%;
+    float: left;
+  }
+  
+  .right-region2 {
+    width: 79%;
+    float: left;
+
+  }
+  .content
+  {
+    min-height: 5px;
+    overflow: hidden;
+  }

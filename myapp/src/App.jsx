@@ -15,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import db from './firebase';
 import { useDispatch } from 'react-redux';
+import AddProductComp from './components/addProduct';
 
 
 function App() {
@@ -23,7 +24,8 @@ function App() {
 
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
-  const [purchases, setPurchases] = useState([]);
+  const [purchases, setPurchases] = useState([{id:1, CustomerID:'Ai4yKjouP7TF9aoGs5h3',ProductID:"JIQw2YkN7rY0cvQS0dyu", Date:"2024-01-02" },
+  {id:2, CustomerID:'Ai4yKjouP7TF9aoGs5h3',ProductID:"KCYI08XqTb6Kmy2VKXlt", Date:"2024-01-02"}]);
 
 
   const getAllata = (type) => {
@@ -52,7 +54,16 @@ function App() {
       
     });
   };
-  
+  const initTotal = ()=>
+  {
+    if(products.length > 0 && purchases.length > 0)
+    {
+      const total = purchases.map(purchase=> +([products.find(product=>(product.id===purchase.ProductID)).price])).reduce((previousValue, currentValue) => previousValue + currentValue);
+      dispatch({ type: 'INCREASE_TOTAL', payload: total});
+    }
+     
+  }
+
   useEffect(()=>
   {
     dispatch({ type: 'INIT_CUSTOMERS', payload: customers });
@@ -61,21 +72,21 @@ function App() {
   useEffect(()=>
   {
     dispatch({ type: 'INIT_PRODUCTS', payload: products });
+    initTotal();
   },[products]);
 
   useEffect(()=>
   {
-    console.log("purchases:", purchases)
-
     dispatch({ type: 'INIT_PURCHASES', payload: purchases });
+    initTotal();
+
   },[purchases]);
   
   useEffect(()=>
   {
     getAllata('customers');
     getAllata('products');
-    getAllata('purchases');
-
+    //getAllata('purchases');
   },[]);
   
 
@@ -89,10 +100,12 @@ function App() {
 
       <Routes>
         <Route path='/' element={<Menu/>}/>
-        <Route path='/products' element={<Products/>}/>
+        <Route path='/products' element={<Products/>}>
+            <Route path='view' element={<CustomersComp/>}/>
+            <Route path='addProduct' element={<AddProductComp/>}/>
+        </Route>
         <Route path='/customers' element={<CustomersComp/>}/>
         <Route path='/purchases' element={<PurchasesComp/>}/>
-
       </Routes>
       <br/>
 
