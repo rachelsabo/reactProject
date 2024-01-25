@@ -15,7 +15,9 @@ import {
 } from 'firebase/firestore';
 import db from './firebase';
 import { useDispatch } from 'react-redux';
-import AddProductComp from './components/addProduct';
+import AddProductComp from './pages/addProduct';
+import EditCustomerComp from './pages/EditCustomer';
+import EditProductComp from './pages/EditProduct';
 
 
 function App() {
@@ -24,8 +26,9 @@ function App() {
 
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
-  const [purchases, setPurchases] = useState([{id:1, CustomerID:'Ai4yKjouP7TF9aoGs5h3',ProductID:"JIQw2YkN7rY0cvQS0dyu", Date:"2024-01-02" },
-  {id:2, CustomerID:'Ai4yKjouP7TF9aoGs5h3',ProductID:"KCYI08XqTb6Kmy2VKXlt", Date:"2024-01-02"}]);
+  const [purchases, setPurchases] = useState([]);
+    /*useState([{id:1, CustomerID:'Ai4yKjouP7TF9aoGs5h3',ProductID:"JIQw2YkN7rY0cvQS0dyu", Date:"2024-01-02" },
+  {id:2, CustomerID:'Ai4yKjouP7TF9aoGs5h3',ProductID:"KCYI08XqTb6Kmy2VKXlt", Date:"2024-01-02"}]);*/
 
 
   const getAllata = (type) => {
@@ -59,7 +62,7 @@ function App() {
     if(products.length > 0 && purchases.length > 0)
     {
       const total = purchases.map(purchase=> +([products.find(product=>(product.id===purchase.ProductID)).price])).reduce((previousValue, currentValue) => previousValue + currentValue);
-      dispatch({ type: 'INCREASE_TOTAL', payload: total});
+      dispatch({ type: 'UPDATE_TOTAL', payload: total});
     }
      
   }
@@ -72,7 +75,6 @@ function App() {
   useEffect(()=>
   {
     dispatch({ type: 'INIT_PRODUCTS', payload: products });
-    initTotal();
   },[products]);
 
   useEffect(()=>
@@ -86,13 +88,12 @@ function App() {
   {
     getAllata('customers');
     getAllata('products');
-    //getAllata('purchases');
+    getAllata('purchases');
   },[]);
   
 
   return (
     <>
-      <Link to='/'>Menu</Link> <br />
       <Link to='/products'>Products</Link> <br />
       <Link to='/customers'>Customers</Link> <br />
       <Link to='/purchases'>Purchases</Link> <br />
@@ -100,12 +101,12 @@ function App() {
 
       <Routes>
         <Route path='/' element={<Menu/>}/>
-        <Route path='/products' element={<Products/>}>
-            <Route path='view' element={<CustomersComp/>}/>
-            <Route path='addProduct' element={<AddProductComp/>}/>
-        </Route>
+        <Route path='/products' element={<Products/>}/>
         <Route path='/customers' element={<CustomersComp/>}/>
         <Route path='/purchases' element={<PurchasesComp/>}/>
+        <Route path='/addProduct/:sourcePage/:customerID' element={<AddProductComp/>}/>
+        <Route path='/editCustomer/:sourcePage/:customerID' element={<EditCustomerComp/>}/>
+        <Route path='/editProduct/:sourcePage/:productID' element={<EditProductComp/>}/>
       </Routes>
       <br/>
 

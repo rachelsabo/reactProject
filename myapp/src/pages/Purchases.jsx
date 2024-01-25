@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ComboBoxComp from "../components/comboBox";
 import { useSelector } from 'react-redux';
 
@@ -6,9 +6,8 @@ import { useSelector } from 'react-redux';
 const PurchasesComp = () => {
     const AllProducts = useSelector(state=> state.productsReducer.products);
     const AllCustomers = useSelector(state=> state.customersReducer.customers);
-    const AllPurchases = [{id:1, CustomerID:'Ai4yKjouP7TF9aoGs5h3',ProductID:"JIQw2YkN7rY0cvQS0dyu", Date:"2024-01-02" },
-                          {id:2, CustomerID:'Ai4yKjouP7TF9aoGs5h3',ProductID:"KCYI08XqTb6Kmy2VKXlt", Date:"2024-01-02"}]
-    //useSelector(state=> state.purchasesReducer.purchases);
+    const AllPurchases = useSelector(state=> state.purchasesReducer.purchases);
+
 
     const [selectedProduct , setSelectedProduct ] = useState('');
     const [selectedCustomer , setSelectedCustomer ] = useState('');
@@ -29,14 +28,13 @@ const PurchasesComp = () => {
       setSelectedPurchases(selectedPurchasesforTable);
     }
     
-
     return (
       <div >
         <h1>Purchases: </h1>
         <ComboBoxComp items={AllProducts} type="products" callBack={item => setSelectedProduct(item) }/>&nbsp; &nbsp;
         <ComboBoxComp items={AllCustomers} type="customers" callBack={item => setSelectedCustomer(item) }/>&nbsp; &nbsp;
         date: <input type="date" onInput={e=> setSelectedDate( e.target.value)}/>&nbsp; &nbsp;
-        <button onClick={searchPurchases}>Search</button><br/><br/>
+        <button onClick={searchPurchases}>Search</button>
         {
          isSearchClicked && <table border="1">
           <thead>

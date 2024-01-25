@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+
 
 
 const CustomerComp = (props) => {
     
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const [customerName, setCustomerName] = useState('');
+
+    const [customer, setCustomer] = useState('');
 
     useEffect(()=>
     {
         const customer = props.customers.find(item=>(item.id === props.purchase.CustomerID));
-        setCustomerName(customer.FirstName +" "+ customer.LastName);
+        setCustomer(customer);
     },[])
 
     return (
         <div>
             <div style={{border:"solid"}}>
-                Name: {customerName}<br/>
+                Name:  <Link to={`/editCustomer/products/${customer.id}`}>{ customer.FirstName +" "+ customer.LastName }</Link><br/>
                 Date: {props.purchase.Date}<br/>
-               <button onClick={()=>{dispatch({ type: 'DISPLAY_ADD_PRODUCT', payload: true})}}>Add</button><br/><br/>
+               <button onClick={()=> navigate(`/addProduct/products/${customer.id}`)}>Add</button><br/><br/>
             </div>
             <br/>
         </div>
